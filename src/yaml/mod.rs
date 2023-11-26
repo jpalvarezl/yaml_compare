@@ -1,14 +1,17 @@
-pub fn load_files()-> Result<(), Box<dyn std::error::Error>> {
+use files::TargetFiles;
+
+pub(crate) mod files;
+
+pub fn load_files()-> Result<TargetFiles, Box<dyn std::error::Error>> {
     let left = load_yaml_file("input/left.yaml")?;
     let right = load_yaml_file("input/right.yaml")?;
 
-    Ok(())
+    Ok(TargetFiles::new(left, right))
 }
 
 
-fn load_yaml_file(file_path: &str) -> Result<(), Box<dyn std::error::Error>> {
-    let f = std::fs::File::open(file_path)?;
-    let d: String = serde_yaml::from_reader(f)?;
-    println!("Read YAML string: {}", d);
-    Ok(())
+fn load_yaml_file(file_path: &str) -> Result<serde_yaml::Value, Box<dyn std::error::Error>> {
+    let file = std::fs::File::open(file_path)?;
+    let file_yaml: serde_yaml::Value = serde_yaml::from_reader(file)?;
+    Ok(file_yaml)
 }
