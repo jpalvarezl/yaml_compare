@@ -2,6 +2,8 @@ extern crate skim;
 use skim::prelude::*;
 use std::io::Cursor;
 
+pub(crate) mod yaml;
+
 pub fn main() {
     let options = SkimOptionsBuilder::default()
         .height(Some("50%"))
