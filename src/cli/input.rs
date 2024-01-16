@@ -1,25 +1,17 @@
 use skim::prelude::*;
 use std::io::Cursor;
 
-pub fn select_one_from(input: Vec<String>) {
+use crate::Result;
+
+pub fn select_one_from(rx_item: Receiver<Arc<dyn SkimItem>>) {
 
     let options = SkimOptionsBuilder::default()
         .height(Some("50%"))
         .multi(true)
         .build()
         .expect("Build CLI layout failed");
-
-    // `SkimItemReader` is a helper to turn any `BufRead` into a stream of `SkimItem`
-    // `SkimItem` was implemented for `AsRef<str>` by default
-    let item_reader = SkimItemReader::default();
-    let items = item_reader.of_bufread(Cursor::new(input.join("\n")));
-
-    // `run_with` would read and show items from the stream
-    let selected_items = Skim::run_with(&options, Some(items))
+    
+    let selected_items = Skim::run_with(&options, Some(rx_item))
         .map(|out| out.selected_items)
         .unwrap_or_else(|| Vec::new());
-
-    for item in selected_items.iter() {
-        print!("{}{}", item.output(), "\n");
-    }
 }
