@@ -1,5 +1,5 @@
-use openapiv3::{PathItem, OpenAPI};
-use skim::SkimItem;
+use openapiv3::{OpenAPI, PathItem};
+use skim::{ItemPreview, PreviewContext, SkimItem};
 
 use crate::Result;
 
@@ -14,8 +14,13 @@ impl SkimItem for YamlPath {
         self.search_key.as_str().into()
     }
 
-    fn output(&self) -> std::borrow::Cow<str> {
-        self.search_key.as_str().into()
+    // should probably do something with the output here. Copy to clip board?
+    // fn output(&self) -> std::borrow::Cow<str> {
+    //     self.search_key.as_str().into()
+    // }
+
+    fn preview(&self, _context: PreviewContext) -> ItemPreview {
+        ItemPreview::Text(format!("{:#?}", self.path))
     }
 }
 
