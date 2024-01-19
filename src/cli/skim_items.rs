@@ -20,7 +20,8 @@ impl SkimItem for YamlPath {
     // }
 
     fn preview(&self, _context: PreviewContext) -> ItemPreview {
-        ItemPreview::Text(format!("{:#?}", self.path))
+        let preview = serde_yaml::to_string(&self.path).expect("Failed to serialize path item");
+        return ItemPreview::Text(preview);
     }
 }
 
